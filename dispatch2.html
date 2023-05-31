@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Eenheden</title>
+  <link rel="stylesheet" href="styles2.css">
+  <style>
+  </style>
+</head>
+<body>
+  <nav>
+    <ul>
+      <li><a href="dispatch.html">Meldkamer</a></li>
+      <li><a href="dispatch2.html">Eenheden</a></li>
+    </ul>
+  </nav>
+  <h1>Eenheden</h1>
+
+  <p>Dit is de tweede dispatch-pagina.</p>
+
+  <h2>Eenheden Status</h2>
+  <div id="unitStatusSection">
+    <label for="unitName">Eenheid:</label>
+    <input type="text" id="unitName" name="unitName" placeholder="Naam eenheid"><br>
+    <label for="unitStatusInput">Status:</label>
+    <select id="unitStatusInput" name="unitStatusInput">
+      <option value="1">Beschikbaar</option>
+      <option value="2">Onderweg</option>
+      <option value="3">Terplaatse</option>
+      <option value="4">Niet beschikbaar</option>
+      <option value="5">Training</option>
+      <option value="6">Transport</option>
+      <option value="7">Uit dienst</option>
+    </select><br>
+    <label for="unitSpecialty">Specialiteit:</label>
+    <select id="unitSpecialty" name="unitSpecialty">
+      <option value="Noodhulp">Noodhulp</option>
+      <option value="VP">VP</option>
+      <option value="Motor">Motor</option>
+      <option value="Zulu">Zulu</option>
+      <option value="DSI">DSI</option>
+      <option value="Transport eenheid">Transport eenheid</option>
+      <!-- Voeg hier meer specialiteiten toe -->
+    </select><br>
+    <button id="addUnitButton">Eenheid toevoegen</button>
+  </div>
+
+  <h2>Eenhedenlijst</h2>
+  <div id="unitSection"></div>
+
+  <div id="map"></div>
+
+  <script src="script2.js"></script>
+</body>
+</html>

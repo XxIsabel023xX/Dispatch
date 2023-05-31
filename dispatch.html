@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Meldkamer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav>
+        <ul>
+          <li><a href="dispatch.html">Meldkamer</a></li>
+          <li><a href="dispatch2.html">Eenheden</a></li>
+        </ul>
+      </nav>
+  <h1>Meldkamer</h1>
+  
+  <form id="dispatchForm">
+    <label for="callerName">Naam van melder:</label><br>
+    <input type="text" id="callerName" name="callerName" required><br>
+    <label for="incidentType">Type incident:</label><br>
+    <input type="text" id="incidentType" name="incidentType" required><br>
+    <label for="description">Beschrijving:</label><br>
+    <textarea id="description" name="description" required></textarea><br>
+    <label for="location">Locatie:</label><br>
+    <input type="text" id="location" name="location" required><br> <!-- Voeg een inputveld toe voor de locatie -->
+    <input type="submit" value="Melding maken">
+  </form>
+
+  <table id="dispatchTable">
+    <tr>
+      <th>Naam van melder</th>
+      <th>Type incident</th>
+      <th>Beschrijving</th>
+      <th>Locatie</th> <!-- Voeg een kolom toe voor de locatie -->
+    </tr>
+  </table>
+
+
+  <button id="resetButton">Reset Dispatch Systeem</button>
+
+  <script src="script.js"></script>
+</body>
+</html>

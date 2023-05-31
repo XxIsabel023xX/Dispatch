@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Aanmelden eenheden</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f5f8fb;
+      color: #333333;
+      margin: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    form {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="submit"] {
+      padding: 5px;
+      font-size: 16px;
+      border-radius: 3px;
+      border: 1px solid #cccccc;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    input[type="submit"] {
+      background-color: #4caf50;
+      color: #ffffff;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+
+    #resetButton {
+      background-color: #f44336;
+      color: #ffffff;
+      cursor: pointer;
+      border: none;
+      padding: 5px 10px;
+      margin-left: 10px;
+    }
+
+    #resetButton:hover {
+      background-color: #d32f2f;
+    }
+
+    #statusContainer {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .status-box {
+      display: inline-block;
+      width: 100px;
+      height: 100px;
+      border: 1px solid black;
+      margin: 5px;
+      cursor: pointer;
+      text-align: center;
+      line-height: 100px;
+      font-size: 14px;
+      font-weight: bold;
+      background-color: #ffffff;
+    }
+
+    #unitTable {
+      margin-top: 20px;
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    #unitTable th,
+    #unitTable td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #dddddd;
+    }
+
+    #unitTable th {
+      background-color: #f9f9f9;
+      font-weight: bold;
+    }
+
+    #unitTable tr:nth-child(even) {
+      background-color: #f5f8fb;
+    }
+  </style>
+</head>
+<body>
+  <h1>Aanmelden eenheden</h1>
+
+  <form id="unitForm">
+    <label for="unitName">Naam van eenheid:</label>
+    <input type="text" id="unitName" required><br>
+
+    <label for="unitType">Type eenheid:</label>
+    <input type="text" id="unitType" required><br>
+
+    <input type="submit" value="Aanmelden">
+  </form>
+
+  <button id="voiceCallButton">Spraakoproep</button>
+  <button id="resetButton">Reset</button>
+
+  <div id="statusContainer">
+    <div class="status-box" id="statusAvailable">Status 1</div>
+    <div class="status-box" id="statusUnavailable">Status 4</div>
+    <div class="status-box" id="statusEnRoute">Status 2</div>
+    <div class="status-box" id="statusArrived">Status 3</div>
+    <div class="status-box" id="statusOutOfService">Status 8</div>
+    <div class="status-box" id="statusOther">Training</div>
+    
+  </div>
+
+  <table id="unitTable">
+    <tr>
+      <th>Naam van eenheid</th>
+      <th>Type eenheid</th>
+      <th>Status</th>
+    </tr>
+  </table>
+
+  <script>
+    // Functie om eenheden op te slaan in de lokale opslag
+    function saveUnit(unitName, unitType, unitStatus) {
+      var unitData = localStorage.getItem("unitData");
+      var unitArray = unitData ? JSON.parse(unitData) : [];
+
+      unitArray.push({ unitName: unitName, unitType: unitType, unitStatus: unitStatus });
+
+      localStorage.setItem("unitData", JSON.stringify(unitArray));
+    }
+
+    // Functie om eenheden op te halen en weer te geven vanuit de lokale opslag
+    function loadUnits() {
+      var unitData = localStorage.getItem("unitData");
+      var unitArray = unitData ? JSON.parse(unitData) : [];
+
+      var table = document.getElementById("unitTable");
+
+      for (var i = 0; i < unitArray.length; i++) {
+        var newRow = table.insertRow(-1);
+
+        var cell1 = newRow.insertCell(0);
+        var cell2 = newRow.insertCell(1);
+        var cell3 = newRow.insertCell(2);
+
+        cell1.innerHTML = unitArray[i].unitName;
+        cell2.innerHTML = unitArray[i].unitType;
+        cell3.innerHTML = unitArray[i].unitStatus;
+      }
+    }
+
+    // Event listener voor het indienen van het formulier
+    document.getElementById("unitForm").addEventListener("submit", function(event) {
+      event.preventDefault(); // Voorkom standaard formulierversending
+
+      var unitName = document.getElementById("unitName").value;
+      var unitType = document.getElementById("unitType").value;
+
+      // Opslaan in lokale opslag met de standaardstatus 'Beschikbaar'
+      saveUnit(unitName, unitType, "Beschikbaar");
+
+      // Toevoegen aan tabel
+      var table = document.getElementById("unitTable");
+      var newRow = table.insertRow(-1);
+
+      var cell1 = newRow.insertCell(0);
+      var cell2 = newRow.insertCell(1);
+      var cell3 = newRow.insertCell(2);
+
+      cell1.innerHTML = unitName;
+      cell2.innerHTML = unitType;
+      cell3.innerHTML = "Beschikbaar";
+
+      // Formulier leegmaken
+      document.getElementById("unitName").value = "";
+      document.getElementById("unitType").value = "";
+    });
+
+    // Event listener voor de resetknop
+    document.getElementById("resetButton").addEventListener("click", function() {
+      // Verwijderen van eenheden uit lokale opslag
+      localStorage.removeItem("unitData");
+
+      // Leegmaken van de tabel
+      var table = document.getElementById("unitTable");
+      while (table.rows.length > 1) {
+        table.deleteRow(1);
+      }
+    });
+
+    // Event listeners voor de statusvakken
+    var statusBoxes = document.getElementsByClassName("status-box");
+    for (var i = 0; i < statusBoxes.length; i++) {
+      statusBoxes[i].addEventListener("click", function() {
+        var selectedUnit = document.querySelector("#unitTable tr:last-child");
+        if (selectedUnit) {
+          var status = this.innerText;
+          selectedUnit.cells[2].innerText = status;
+          updateUnitStatus(selectedUnit.cells[0].innerText, status);
+        }
+      });
+    }
+
+    // Functie om de status van een eenheid bij te werken in de lokale opslag
+    function updateUnitStatus(unitName, unitStatus) {
+      var unitData = localStorage.getItem("unitData");
+      var unitArray = unitData ? JSON.parse(unitData) : [];
+
+      for (var i = 0; i < unitArray.length; i++) {
+        if (unitArray[i].unitName === unitName) {
+          unitArray[i].unitStatus = unitStatus;
+          localStorage.setItem("unitData", JSON.stringify(unitArray));
+          break;
+        }
+      }
+    }
+
+    // Laden van opgeslagen eenheden bij het laden van de pagina
+    window.addEventListener("DOMContentLoaded", function() {
+      loadUnits();
+    });
+  </script>
+</body>
+</html>
